@@ -1,0 +1,5 @@
+[
+  "tdapps/user/test/test_user_models.py::test_create_admin",
+  "tdapps/user/test/test_user_models.py::test_create_user",
+  "tdapps/user/test/test_user_models.py::test_crete_superuser"
+]
