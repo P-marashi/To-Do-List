@@ -22,6 +22,13 @@ class BaseAuthSerializer(serializers.Serializer):
             raise serializers.ValidationError(_("Email is not valid!"))
         return email
 
+
+class VerifyURLSerializer(serializers.Serializer):
+    """ Serializer for response Url to user """
+
+    url = serializers.URLField()
+
+
 class LoginSerializer(BaseAuthSerializer):
     """ Serializer for login API """
     password = serializers.CharField()

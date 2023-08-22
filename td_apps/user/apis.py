@@ -6,11 +6,13 @@ from rest_framework.response import Response
 # import spectacular 
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 # Local app 
-from .serializers import RegisterSerializer, LoginSerializer, TokenSerializer
+from .serializers import RegisterSerializer, LoginSerializer, TokenSerializer, VerifyURLSerializer
 from .backend import email_authentication
 from td_apps.core.otp import otp_generator
 from td_apps.core.cache import cache_otp
 from td_apps.core.tasks import send_otp_email
+from td_apps.core.tokens import one_time_token_generator
+
 
 # declared needed api parameters on @extend_schema it will be use 
 ONE_TIME_LINK_API_PARAMETERS = [

@@ -7,7 +7,6 @@ __pycache__/
 # Ignore virtual environment
 venv/
 env/
-
 # Ignore database
 db.sqlite3
 
@@ -35,3 +34,7 @@ yarn-error.log*
 
 # Ignore Django migration files
 **/migrations/
+
+dump.rdb
+
+.gitignore
