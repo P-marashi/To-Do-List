@@ -130,7 +130,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'marashipouya@gmail.com'  # Replace with your Gmail address
-EMAIL_HOST_PASSWORD = 'bncuwcneobtffasi'  # Replace with your App Password
+EMAIL_HOST_PASSWORD = 'sample'  # Replace with your App Password
 DEFAULT_FROM_EMAIL = "myapp"
 
 # REST framework settings
