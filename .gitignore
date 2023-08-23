@@ -7,6 +7,7 @@ __pycache__/
 # Ignore virtual environment
 venv/
 env/
+.env
 # Ignore database
 db.sqlite3
 

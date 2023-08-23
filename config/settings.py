@@ -1,6 +1,7 @@
 import datetime
 from pathlib import Path
 from decouple import config as env
+from datetime import timedelta
 
 # Base directory of the project
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -123,13 +124,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "user.user"
 
 # Email settings
-EMAIL_BACKEND = env("EMAIL_BACKEND")
-EMAIL_HOST = env("EMAIL_HOST")
-EMAIL_PORT = env("EMAIL_PORT")
-EMAIL_USE_TLS = env("EMAIL_USE_TLS")
-DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
-EMAIL_HOST_USER = env("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'marashipouya@gmail.com'  # Replace with your Gmail address
+EMAIL_HOST_PASSWORD = 'bncuwcneobtffasi'  # Replace with your App Password
+DEFAULT_FROM_EMAIL = "myapp"
 
 # REST framework settings
 REST_FRAMEWORK = {
@@ -138,15 +140,27 @@ REST_FRAMEWORK = {
     ),
 }
 
-# JWT authentication settings
-JWT_AUTH = {
-    'JWT_SECRET_KEY': 'your-secret-key',
-    'JWT_ALGORITHM': 'HS256',
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+# setting for redis cache 
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',  # Replace with your Redis server info
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
 }
 
+
 # Celery settings
-CELERY_BROKER_URL = env("CELERY_BROKER_URL")
-CELERY_RESULT_BACKEND = env("CELERY_RESULT_BACKEND")
-CELERY_TIMEZONE = env("CELERY_TIMEZONE")
-CELERY_BEAT_SCHEDULE = env("CELERY_BEAT_SCHEDULE")
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
+
+# Celery Task Serialization and Content Acceptance
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_DEBUG = "DEBUG"
+
+# Celery Timezone (UTC by default)
+CELERY_TIMEZONE = 'Asia/Tehran'
