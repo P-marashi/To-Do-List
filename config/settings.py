@@ -107,7 +107,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization settings
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tehran'
 USE_I18N = True
 USE_TZ = True
 
@@ -122,16 +122,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom user model
 AUTH_USER_MODEL = "user.user"
-
-# Email settings
-# Email settings
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'marashipouya@gmail.com'  # Replace with your Gmail address
-EMAIL_HOST_PASSWORD = 'sample'  # Replace with your App Password
-DEFAULT_FROM_EMAIL = "myapp"
 
 # REST framework settings
 REST_FRAMEWORK = {
@@ -153,14 +143,25 @@ CACHES = {
 
 
 # Celery settings
-CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
-CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
+CELERY_BROKER_URL = env("CELERY_BROKER_URL")
+CELERY_RESULT_BACKEND = env("CELERY_RESULT_BACKEND")
 
 # Celery Task Serialization and Content Acceptance
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_DEBUG = "DEBUG"
+# for CELERY_ACCEPT_CONTENT In .env just write json without double quotes or single quotes
+CELERY_ACCEPT_CONTENT = env('CELERY_ACCEPT_CONTENT').split(',')
+CELERY_TASK_SERIALIZER = env("CELERY_TASK_SERIALIZER")
+CELERY_RESULT_SERIALIZER = env("CELERY_RESULT_SERIALIZER")
+CELERY_DEBUG = ("CELERY_DEBUG")
 
 # Celery Timezone (UTC by default)
-CELERY_TIMEZONE = 'Asia/Tehran'
+CELERY_TIMEZONE = env("CELERY_TIMEZONE")
+
+# Email settings
+EMAIL_BACKEND = env("EMAIL_BACKEND")
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_PORT = env("EMAIL_PORT")
+EMAIL_USE_TLS = env("EMAIL_USE_TLS")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER") 
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
+   

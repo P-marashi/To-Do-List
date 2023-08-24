@@ -3,8 +3,8 @@ from django.conf import settings
 from django.core.mail import send_mail
 from config.tools.celery import app
 
-# Email content template for OTP
 
+# Email content template for OTP
 OTP_CONTENT = """
 <p>{username} عزیز!</p>
 <p>وبسایت {website_name} خوش آمدید به</p>
@@ -18,7 +18,7 @@ def send_otp_email(to_email, otp_code):
         website_name=settings.SITE_NAME,
         otp_code=otp_code
     )
-    
+   
     send_mail(
         subject=f"کد ورود به {settings.SITE_NAME}",
         message="",  # Leave this empty since you're using `html_message`
@@ -26,5 +26,5 @@ def send_otp_email(to_email, otp_code):
         from_email=None,
         recipient_list=[to_email]
     )
+    
     return 1
-# celery -A config.tools worker -l info -E 

@@ -6,7 +6,14 @@ from rest_framework.response import Response
 # import spectacular 
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 # Local app 
-from .serializers import RegisterSerializer, LoginSerializer, TokenSerializer, VerifyURLSerializer
+from .serializers import (
+    RegisterVerifySerializer,
+    RegisterSerializer,
+    LoginSerializer,
+    TokenSerializer,
+     VerifyURLSerializer,
+     
+)
 from .backend import email_authentication
 from td_apps.core.otp import otp_generator
 from td_apps.core.cache import cache_otp
@@ -63,7 +70,6 @@ class AuthViewSet(viewsets.ViewSet):
         
         # Generate OTP and cache it
         otp = otp_generator()
-        print(otp)
         cache_otp(email, otp)
 
         # Create a new user
@@ -74,3 +80,15 @@ class AuthViewSet(viewsets.ViewSet):
         # Generate and return a verification URL
         url = one_time_token_generator.create_url_activation(user)
         return Response(data=VerifyURLSerializer({'url': url}).data, status=status.HTTP_201_CREATED)
+
+    @action(detail=False, methods=['post'], url_path='verify/(?P<uidb64>[^/.]+)/(?P<token>[^/.]+)')
+    def verify(self, request, uidb64, token):
+        """ Verify user registration using the one-time token """
+        user = one_time_token_generator.check_url_token(uidb64, token)
+        if user:
+            serializer = RegisterVerifySerializer(data=request.data, context={'user': user})
+            serializer.is_valid(raise_exception=True)
+            user.is_active = True
+            user.save()
+            return Response(data=TokenSerializer(email_authentication.generate_token(user)).data, status=status.HTTP_200_OK)
+        return Response(data={'error': 'Url activation token is expired.'}, status=status.HTTP_403_FORBIDDEN)  

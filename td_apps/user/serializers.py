@@ -58,6 +58,29 @@ class RegisterSerializer(BaseAuthSerializer):
         )
         return validated_data
 
+
+class RegisterVerifySerializer(serializers.Serializer):
+    """ Serializer for Verifying registration API """
+
+    code = serializers.CharField()
+
+    def validate(self, validated_data):
+        """ custom validation error for code
+            raise validation error when code
+            is expired or not valid
+        """
+        user = self.context['user']
+        email = user.email
+
+        code = int(validated_data.get("code"))  # Convert to int
+        cached_otp = get_cached_otp(email)
+
+        if not cached_otp:
+            raise serializers.ValidationError(_("Code has been expired"))
+        if code != cached_otp:
+            raise serializers.ValidationError(_("Code is invalid"))
+
+        return validated_data
 class TokenSerializer(serializers.Serializer):
     """ Serializer for Response token
         to user at Login API
